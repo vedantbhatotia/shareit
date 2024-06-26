@@ -2,7 +2,7 @@
 import { AlertCircle } from "lucide-react";
 import { useState } from "react"
 import FilePreview from "./FilePreview"
-export default function UploadForm(){
+export default function UploadForm({func}){
     const [file,setFile] = useState();
     const [errorMsg,setErrorMsg] = useState();
 
@@ -35,7 +35,7 @@ export default function UploadForm(){
             </div> 
             {errorMsg?<AlertMsg msg={errorMsg}></AlertMsg>:null}
             {file?<FilePreview file={file} removeFile={()=>setFile(null)}></FilePreview>:null}
-            <button disabled={!file} className="p-2 bg-gray-50 text-black w-[30%] rounded-full mt-5 disabled:bg-gray-400">Upload</button>
+            <button disabled={!file} className="p-2 bg-gray-50 text-black w-[30%] rounded-full mt-5 disabled:bg-gray-400" onClick={()=>func(file)}>Upload</button>
         </div>
     )
 }
