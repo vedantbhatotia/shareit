@@ -8,7 +8,7 @@ export default function Layout({children}){
         </div>
         <div className="md:ml-64">
             <TopHeader></TopHeader>
-        {children}
+            {children}
         </div>
         </>
     )
