@@ -41,7 +41,7 @@ export default function Upload() {
   }
 
   async function SaveInfo(file, fileUrl) {
-    const docId = generateRandomString(); // Call the function to get the string
+    const docId = generateRandomString().toString();
     const resp = await setDoc(doc(db, "uploadedId", docId), {
       fileName: file?.name,
       fileSize: file?.size,
