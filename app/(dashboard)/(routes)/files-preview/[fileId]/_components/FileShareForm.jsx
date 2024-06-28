@@ -1,30 +1,46 @@
-import { Copy } from "lucide-react";
+import { Copy, FileType } from "lucide-react";
 import { useState } from "react";
 import globalapi from "../../../../../globalapi";
+import { useUser } from "@clerk/nextjs";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function FileShareForm({ file, onPasswordSave }) {
   const [password, setPassword] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
   const [email, setEmail] = useState("");
+  const { user } = useUser();
+
   const sendEmail = () => {
-    const data = { email, shortUrl: file.shortUrl };
+    const data = {
+      emailToSend: email,
+      userName: user?.fullName,
+      fileName: file?.fileName,
+      fileSize: file?.fileSize,
+      fileType: file?.fileType,
+      shortUrl: file.shortUrl,
+    };
     globalapi.sendEmail(data).then(resp => {
       console.log(resp);
+      toast.success('Email sent successfully!');
     }).catch(err => {
       console.error(err);
+      toast.error('Failed to send email.');
     });
   };
+
   const copyToClipboard = () => {
     navigator.clipboard.writeText(file.shortUrl).then(() => {
-      alert('Short URL copied to clipboard!');
+      toast.success('Short URL copied to clipboard!');
     }, () => {
-      alert('Failed to copy the URL.');
+      toast.error('Failed to copy the URL.');
     });
   };
 
   return (
     file && (
       <div className="flex flex-col gap-4 p-4 bg-gray-900 text-white rounded-lg shadow-lg">
+        <ToastContainer />
         <div>
           <label className="text-[14px] text-gray-400">Short Url</label>
           <div className="flex gap-3 p-2 border border-gray-700 rounded-md items-center">

@@ -10,11 +10,10 @@ export async function POST(req) {
   try {
     const { data, error } = await resend.emails.send({
       from: 'Acme <onboarding@resend.dev>',
-      to: ['vedantbhatotia@gmail.com'],
-      subject: 'Hello world',
-      react: EmailTemplate({ firstName: 'John' }),
+      to: [response?.emailToSend],
+      subject:`${response?.userName} shared a file with you`,
+      react: EmailTemplate({response}),
     });
-
     if (error) {
       return Response.json({ error }, { status: 500 });
     }

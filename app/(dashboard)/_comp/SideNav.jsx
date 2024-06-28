@@ -3,6 +3,7 @@ import { ShieldIcon, Upload } from "lucide-react"
 import Image from "next/image"
 import { useState } from "react"
 import { File } from "lucide-react"
+import Link from "next/link"
 export default function SideNav(){
     const [activeIndex,setActiveIndex] = useState()
     const menuList=[
@@ -40,7 +41,10 @@ export default function SideNav(){
                     setActiveIndex(index)
                 }}>
                     <item.icon></item.icon>
-                    <h2>{item.name}</h2>
+                    <Link href={item.path}>
+                        <h2>{item.name}</h2>
+                    </Link>
+                    {/* <Link>{item.path}</Link> */}
                 </button>
             ))}
             </div>
