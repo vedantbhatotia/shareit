@@ -1,10 +1,19 @@
 import { Copy } from "lucide-react";
 import { useState } from "react";
+import globalapi from "../../../../../globalapi";
 
 export default function FileShareForm({ file, onPasswordSave }) {
-  const [password, setPassword] = useState();
+  const [password, setPassword] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
-
+  const [email, setEmail] = useState("");
+  const sendEmail = () => {
+    const data = { email, shortUrl: file.shortUrl };
+    globalapi.sendEmail(data).then(resp => {
+      console.log(resp);
+    }).catch(err => {
+      console.error(err);
+    });
+  };
   const copyToClipboard = () => {
     navigator.clipboard.writeText(file.shortUrl).then(() => {
       alert('Short URL copied to clipboard!');
@@ -25,8 +34,8 @@ export default function FileShareForm({ file, onPasswordSave }) {
               disabled
               className="disabled:text-gray-500 bg-transparent outline-none w-full"
             />
-            <Copy 
-              className="text-gray-400 hover:text-blue-400 cursor-pointer" 
+            <Copy
+              className="text-gray-400 hover:text-blue-400 cursor-pointer"
               onClick={copyToClipboard}
             />
           </div>
@@ -50,13 +59,31 @@ export default function FileShareForm({ file, onPasswordSave }) {
             </div>
             <button
               className="p-2 bg-blue-600 text-white rounded-md disabled:bg-gray-500"
-              disabled={password?.length < 3}
+              disabled={password.length < 3}
               onClick={() => onPasswordSave(password)}
             >
               Save
             </button>
           </div>
         )}
+        <div className="border rounded-md p-3 mt-5">
+          <label className="text-[14px] text-gray-500">Send Email</label>
+          <div className="border rounded-md p-2">
+            <input
+              type="email"
+              placeholder="example@gmail.com"
+              className="bg-transparent outline-none w-full"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <button
+            className="p-2 w-full mt-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-md hover:from-blue-600 hover:to-blue-800 transition-colors duration-300 shadow-lg transform hover:scale-105"
+            onClick={sendEmail}
+          >
+            Send Email
+          </button>
+        </div>
       </div>
     )
   );
